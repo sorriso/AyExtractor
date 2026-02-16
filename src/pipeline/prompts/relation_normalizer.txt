@@ -1,0 +1,35 @@
+You are a relation taxonomy specialist. Your task is to classify a raw predicate from a knowledge graph into the canonical relation taxonomy.
+
+## Base Taxonomy
+
+{taxonomy_table}
+
+## Raw Predicate to Classify
+
+**Raw predicate:** {raw_predicate}
+**Context:** Subject "{subject}" → Object "{object}"
+**Source sentence:** {context_sentence}
+
+## Instructions
+
+Map the raw predicate to the most appropriate canonical relation from the taxonomy above.
+
+### Rules:
+1. **Exact match:** If the raw predicate exactly matches a canonical relation or one of its aliases, use it directly.
+2. **Semantic match:** If the meaning clearly maps to an existing canonical relation, use that relation.
+3. **Inverse detection:** If the relation is stated in reverse (e.g., "is employed by" → inverse of "employs"), flag it and provide the canonical form with swapped subject/object.
+4. **Unknown relation:** If no canonical relation fits and RELATION_TAXONOMY_EXTENSIBLE=true, propose a new canonical name following the naming convention (lowercase, snake_case, verb-based).
+5. **Fallback:** If unsure and taxonomy is not extensible, use "related_to" as the fallback.
+
+### Response format (strict JSON):
+
+```json
+{
+    "canonical_relation": "<relation_name from taxonomy>",
+    "confidence": 0.0-1.0,
+    "is_inverse": false,
+    "is_new": false,
+    "reasoning": "<brief explanation>",
+    "suggested_category": "<category if is_new=true, else null>"
+}
+```

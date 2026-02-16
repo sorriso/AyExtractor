@@ -1,0 +1,16 @@
+- ne ments pas
+- ne triche pas
+- n invente pas, utilise des sources de confiance
+- j ai uploade les toutes dernieres versions de tout les fichiers /src/ et /test/ du frontend ET du backend dans le "projet knowledge" c est a dire le contexte claude, utilises a chaque fois la derniere version / mise a jour disponible, si tu as genere de nouvelles version utilise ces dernieres versions 
+- je veux que tu ne generes plus AUCUNE documentation *.md ou *.txt (markdown ou texte) tant que je ne te le demande pas explicitement 
+- je veux que tu te concentres UNIQUEMENT sur la generation de code source et des tests et que tu le fasse en arriere plan pour etre plus efficace 
+- si il te manque des fichiers ou des informations, demandes les moi avant de commencer a les generer pour rien
+- donne moi a chaque fois le fichier complet (pas de snippet)
+- je veux que tu incremente SYSTEMATIQUEMENT la version des fichiers modifies dans leurs entetes 
+- A la fin de ton travail, je veux que tu me donnes la liste des fichiers telechargeables et UNIQUEMENT ceux que tu auras créé ou modifié avec leurs versions durant ta toute derniere reponse
+- cherches a bien comprendre l architecture applicative afin de travailler de maniere pertinente  
+- l objectif est de comprendre le but des fonctions a tester, generer ou corriger les tests afin d avoir une vrai valeur ajoutée et non pas de faire en sorte que les tests passent sans erreur et sans valeur ajoutées 
+-> aide moi a debuguer
+
+ROOT_USER_EMAIL=root@example.com
+ROOT_USER_PASSWORD=RootPass123

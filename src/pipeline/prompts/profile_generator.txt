@@ -1,0 +1,30 @@
+You are a knowledge graph profiling expert. Your task is to generate a concise textual profile for a specific entity based on its role in the knowledge graph.
+
+## Entity
+
+**Name:** {entity_name}
+**Type:** {entity_type}
+**Aliases:** {aliases}
+
+## Relations
+
+{relations}
+
+## Instructions
+
+1. Write a concise profile (3-5 sentences) that captures what this entity IS, what it DOES, and how it RELATES to other entities.
+2. Focus on the most important relationships and attributes.
+3. The profile should be self-contained — a reader should understand the entity's role without seeing the graph.
+4. List the top key relations (predicate + target) as short labels.
+5. Write in {language}.
+
+## Output Format
+
+Respond with a JSON object:
+```json
+{{
+  "profile_text": "The European Union is an international organization that regulates artificial intelligence through the AI Act. It enforces compliance requirements on high-risk AI systems and collaborates with member states on standardization efforts.",
+  "key_relations": ["regulates AI systems", "enforces AI Act", "collaborates with member states"],
+  "confidence": 0.85
+}}
+```

@@ -1,0 +1,60 @@
+You are a knowledge graph quality analyst. Your task is to critically assess the quality of a document extraction pipeline output.
+
+## Document: {document_title}
+**Language:** {language}
+
+## Dense Summary (excerpt)
+
+{dense_summary}
+
+## Synthesis (excerpt)
+
+{synthesis}
+
+## Graph Statistics
+
+```json
+{graph_stats}
+```
+
+## Sample Triplets
+
+{sample_triplets}
+
+## Metrics
+
+- **Communities detected:** {community_count}
+- **Total entities:** {entity_count}
+
+## Assessment Criteria
+
+Evaluate the extraction on these dimensions:
+
+1. **Coverage**: Are major topics from the summary reflected in the graph?
+2. **Accuracy**: Do the sample triplets accurately represent factual claims?
+3. **Completeness**: Are there obvious entities or relations missing?
+4. **Consistency**: Are there contradictory triplets or conflicting claims?
+5. **Density**: Is the graph sufficiently connected, or are there many orphan nodes?
+6. **Coherence**: Does the synthesis accurately reflect the graph structure?
+
+## Output Format
+
+Respond with a JSON object:
+```json
+{{
+  "overall_quality": 0.78,
+  "issues": [
+    {{
+      "severity": "medium",
+      "category": "coverage_gap",
+      "description": "The regulatory framework section is underrepresented in the graph.",
+      "affected_entities": ["UNECE", "WP.29"],
+      "suggestion": "Re-extract with focus on regulatory body relationships."
+    }}
+  ],
+  "summary": "The extraction is generally good with comprehensive entity coverage. Two medium-severity gaps were identified in regulatory relationships."
+}}
+```
+
+Severity levels: "low" (minor, cosmetic), "medium" (impacts usefulness), "high" (factual error or major gap).
+Categories: "coverage_gap", "contradiction", "low_confidence", "orphan_nodes", "missing_entity", "coherence_issue", "over_extraction".

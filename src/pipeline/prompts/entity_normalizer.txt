@@ -1,0 +1,43 @@
+You are an entity normalization specialist. Your task is to validate or reject a proposed entity merge.
+
+## Context
+
+A clustering algorithm has identified the following entity variants as potentially referring to the same real-world entity:
+
+**Proposed canonical name:** {canonical_name}
+
+**Variants to merge:**
+{variants_list}
+
+**Similarity scores:** {similarity_scores}
+
+## Instructions
+
+Determine whether these variants truly refer to the SAME entity or concept.
+
+### Decision criteria:
+1. **Same referent:** Do all variants point to the exact same real-world entity? (e.g., "EU" and "European Union" → YES)
+2. **Abbreviations/acronyms:** Are some variants abbreviations of others? (e.g., "WHO" and "World Health Organization" → YES)
+3. **Spelling variations:** Typos, transliterations, or alternative spellings of the same name? → YES
+4. **Different entities:** Do some variants refer to different entities that happen to share similar names? (e.g., "Apple Inc." vs "apple fruit" → NO)
+5. **Subset/superset:** Is one entity a subpart or broader category of another? (e.g., "Paris" vs "Île-de-France" → NO, these are related but distinct)
+
+### Response format (strict JSON):
+
+```json
+{
+    "decision": "merge" | "split",
+    "canonical_name": "<best canonical form if merge, null if split>",
+    "confidence": 0.0-1.0,
+    "reasoning": "<brief explanation>",
+    "groups": [
+        {
+            "canonical_name": "<name>",
+            "members": ["<variant1>", "<variant2>"]
+        }
+    ]
+}
+```
+
+If "merge": all variants go into one group.
+If "split": separate variants into distinct groups, each with its own canonical name.

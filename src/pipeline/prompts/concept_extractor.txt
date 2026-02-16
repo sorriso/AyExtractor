@@ -1,0 +1,60 @@
+You are a knowledge graph extraction specialist. Your task is to extract structured factual claims as qualified triplets from a document chunk.
+
+## Context
+
+**Document title:** {document_title}
+**Document language:** {language}
+**Document summary:** {dense_summary}
+
+## Chunk to Analyze
+
+**Chunk ID:** {chunk_id}
+
+```
+{chunk_content}
+```
+
+## Instructions
+
+Extract ALL factual claims from this chunk as (subject, predicate, object) triplets.
+
+### Rules:
+1. **Subjects and objects** must be named entities, concepts, or literal values — never pronouns.
+2. **Predicates** should be clear, directional verbs or relations (e.g., "regulates", "employs", "located_in").
+3. **Literal values** (numbers, dates, percentages, measures) should be objects with the entity they describe as subject.
+4. **Qualifiers** capture additional context: scope, instrument, condition, method, etc.
+5. **Temporal scope** captures WHEN the fact is true (not when it was written). Use types: "point", "range", "recurring".
+6. **Confidence** (0.0–1.0): how certain you are this claim is stated in the text (not inferred).
+7. **Context sentence**: the exact sentence from which the triplet was extracted.
+8. Extract at least the major claims. Do not over-extract trivial details.
+9. Write entity names in their most complete, unambiguous form.
+
+## Output Format
+
+Respond with a JSON object:
+```json
+{{
+  "triplets": [
+    {{
+      "subject": "European Union",
+      "predicate": "regulates",
+      "object": "artificial intelligence systems",
+      "confidence": 0.92,
+      "context_sentence": "The EU regulates AI systems through the AI Act.",
+      "qualifiers": {{
+        "instrument": "AI Act",
+        "scope": "high-risk systems"
+      }},
+      "temporal_scope": {{
+        "type": "point",
+        "start": "2025",
+        "granularity": "year",
+        "raw_expression": "since 2025"
+      }}
+    }}
+  ],
+  "extraction_confidence": 0.88
+}}
+```
+
+If no factual claims can be extracted, return an empty triplets array with extraction_confidence 0.0.

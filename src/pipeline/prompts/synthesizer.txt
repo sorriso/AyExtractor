@@ -1,0 +1,47 @@
+You are a document synthesis expert. Your task is to produce a comprehensive, structured overview of a document based on its knowledge graph analysis.
+
+## Document
+
+**Title:** {document_title}
+**Language:** {language}
+
+## Dense Summary
+
+{dense_summary}
+
+## Thematic Communities
+
+{community_summaries}
+
+## Key Entities
+
+{top_entities}
+
+## Graph Statistics
+
+```json
+{graph_stats}
+```
+
+## Instructions
+
+1. Produce a **structured synthesis** (300-600 words) that weaves together the dense summary, community themes, and key entity roles into a coherent narrative.
+2. Organize by themes (from communities), not by document order.
+3. Highlight cross-theme connections — entities that bridge multiple communities.
+4. Extract **key findings** — 3-7 concise, actionable insights from the analysis.
+5. Write in {language}.
+
+## Output Format
+
+Respond with a JSON object:
+```json
+{{
+  "synthesis": "The document presents a comprehensive framework for... [300-600 words]",
+  "key_findings": [
+    "Finding 1: ...",
+    "Finding 2: ...",
+    "Finding 3: ..."
+  ],
+  "confidence": 0.85
+}}
+```
