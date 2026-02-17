@@ -8,7 +8,7 @@
 - donne moi a chaque fois le fichier complet (pas de snippet)
 - je veux que tu incremente SYSTEMATIQUEMENT la version des fichiers modifies dans leurs entetes 
 - A la fin de ton travail, je veux que tu me donnes la liste des fichiers telechargeables et UNIQUEMENT ceux que tu auras créé ou modifié avec leurs versions durant ta toute derniere reponse
-- cherches a bien comprendre l architecture applicative afin de travailler de maniere pertinente  
+- cherches a bien comprendre l architecture applicative afin de travailler de maniere pertinente, si tu ne sais pas ou si il te manque des informations, demandes les
 - l objectif est de comprendre le but des fonctions a tester, generer ou corriger les tests afin d avoir une vrai valeur ajoutée et non pas de faire en sorte que les tests passent sans erreur et sans valeur ajoutées 
 -> aide moi a debuguer
 

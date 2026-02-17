@@ -1,4 +1,4 @@
-# src/rag/vector_store/qdrant_store.py — v2
+# src/rag/vector_store/qdrant_store.py — v3
 """Qdrant vector store adapter.
 
 Uses the qdrant-client SDK for local or cloud vector storage.
@@ -6,6 +6,7 @@ Requires: pip install qdrant-client.
 See spec §30.6.
 
 Changelog:
+    v3: Score safety — handle None score from query_points.
     v2: Fix for qdrant-client>=1.13 — use query_points() instead of removed search().
 """
 
@@ -102,7 +103,7 @@ class QdrantStore(BaseVectorStore):
                     source_type=payload.get("source_type", "chunk"),
                     source_id=str(hit.id),
                     content=payload.get("document", ""),
-                    score=hit.score,
+                    score=float(hit.score) if hit.score is not None else 0.0,
                     metadata=payload,
                 )
             )

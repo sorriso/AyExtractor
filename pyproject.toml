@@ -1,11 +1,11 @@
-# pyproject.toml — v3
+# pyproject.toml — v4
 [build-system]
 requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "ayextractor"
-version = "0.3.0"
+version = "0.3.1"
 description = "Multi-Agent Document Analyzer with GraphRAG"
 requires-python = ">=3.11"
 license = {text = "Proprietary"}
@@ -19,13 +19,6 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = [
-    "pytest>=9.0.2",
-    "pytest-asyncio>=1.3.0",
-    "pytest-cov>=7.0.0",
-    "ruff>=0.15.1",
-    "mypy>=1.19.1",
-]
 pdf = [
     "pymupdf>=1.27.1",
 ]
@@ -41,14 +34,35 @@ graph = [
 ]
 rag = [
     "chromadb>=1.5.0",
+    "qdrant-client>=1.13.0",
     "langchain-core>=1.2.13",
     "langgraph>=1.0.8",
+]
+storage = [
+    "python-arango>=8.2.0",
+    "neo4j>=5.28.0",
+    "boto3>=1.38.0",
+]
+dev = [
+    "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.15.1",
+    "mypy>=1.19.1",
+]
+integration = [
+    "testcontainers[arangodb,qdrant,ollama,chroma]>=4.14.1",
+    "python-arango>=8.2.0",
+    "qdrant-client>=1.13.0",
+    "chromadb>=1.5.0",
+    "ollama>=0.6.1",
+    "docker>=7.1.0",
 ]
 gpu = [
     "nx-cugraph-cu12>=26.2.0",
     "cuml-cu12>=26.2.0",
 ]
-all = ["ayextractor[pdf,llm,graph,rag]"]
+all = ["ayextractor[pdf,llm,graph,rag,storage]"]
 
 [tool.setuptools.package-dir]
 ayextractor = "src"
@@ -65,6 +79,7 @@ packages = [
     "ayextractor.core",
     "ayextractor.extraction",
     "ayextractor.graph",
+    "ayextractor.graph.exporters",
     "ayextractor.graph.layers",
     "ayextractor.graph.profiles",
     "ayextractor.llm",
@@ -89,7 +104,11 @@ asyncio_mode = "auto"
 markers = [
     "gpu: GPU-accelerated tests (requires NVIDIA GPU + RAPIDS)",
     "integration: integration tests requiring external services",
-    "slow: long-running tests",
+    "slow: long-running tests (e.g. Ollama model pull)",
+    "arangodb: tests requiring ArangoDB testcontainer",
+    "qdrant: tests requiring Qdrant testcontainer",
+    "chromadb: tests requiring ChromaDB testcontainer",
+    "ollama: tests requiring Ollama testcontainer",
 ]
 
 [tool.ruff]

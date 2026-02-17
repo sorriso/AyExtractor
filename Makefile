@@ -1,5 +1,11 @@
-# Makefile — v3
+# Makefile — v4
 # === ayExtractor Makefile ===
+#
+# Changelog:
+#     v4: test-coverage now runs unit + integration in a single pytest
+#         invocation for unified coverage report. Added test-coverage-unit
+#         and test-coverage-integration for granular runs.
+#     v3: Initial Makefile with separate targets.
 
 PYTHON ?= python3
 PYTEST ?= $(PYTHON) -m pytest
@@ -7,7 +13,9 @@ SRC_DIR = src
 TEST_DIR = tests
 COV_DIR = coverage
 
-.PHONY: help install test test-unit test-integration test-gpu test-coverage lint format typecheck clean
+.PHONY: help install test test-unit test-integration test-gpu \
+        test-coverage test-coverage-unit test-coverage-integration \
+        lint format typecheck clean
 
 help:  ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
@@ -27,9 +35,9 @@ test-integration:  ## Run integration tests (requires LLM API keys + optional DB
 test-gpu:  ## Run GPU-accelerated tests (requires NVIDIA GPU + RAPIDS)
 	$(PYTEST) $(TEST_DIR)/ -v --tb=short -m gpu
 
-test-coverage:  ## Run unit tests with coverage report (terminal + HTML + XML)
+test-coverage:  ## Run ALL tests (unit + integration) with unified coverage report
 	@mkdir -p $(COV_DIR)
-	$(PYTEST) $(TEST_DIR)/unit/ \
+	$(PYTEST) $(TEST_DIR)/unit/ $(TEST_DIR)/integration/ \
 		--cov=$(SRC_DIR) \
 		--cov-report=term-missing \
 		--cov-report=html:$(COV_DIR)/html \
@@ -41,6 +49,24 @@ test-coverage:  ## Run unit tests with coverage report (terminal + HTML + XML)
 	@echo "  HTML  → $(COV_DIR)/html/index.html"
 	@echo "  XML   → $(COV_DIR)/coverage.xml"
 	@echo "  JSON  → $(COV_DIR)/coverage.json"
+
+test-coverage-unit:  ## Run unit tests only with coverage report
+	@mkdir -p $(COV_DIR)
+	$(PYTEST) $(TEST_DIR)/unit/ \
+		--cov=$(SRC_DIR) \
+		--cov-report=term-missing \
+		--cov-report=html:$(COV_DIR)/html \
+		--cov-report=xml:$(COV_DIR)/coverage.xml \
+		-v --tb=short
+
+test-coverage-integration:  ## Run integration tests only with coverage report
+	@mkdir -p $(COV_DIR)
+	$(PYTEST) $(TEST_DIR)/integration/ \
+		--cov=$(SRC_DIR) \
+		--cov-report=term-missing \
+		--cov-report=html:$(COV_DIR)/html \
+		--cov-report=xml:$(COV_DIR)/coverage.xml \
+		-v --tb=short
 
 lint:  ## Run linters (ruff)
 	$(PYTHON) -m ruff check $(SRC_DIR) $(TEST_DIR)

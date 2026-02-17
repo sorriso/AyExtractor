@@ -1,9 +1,15 @@
-# src/rag/vector_store/chromadb_store.py — v1
+# src/rag/vector_store/chromadb_store.py — v3
 """ChromaDB vector store adapter.
 
 Uses the chromadb SDK for local or remote vector storage.
 Requires: pip install chromadb.
 See spec §30.6.
+
+Changelog:
+    v3: Fix ChromaDB >=1.5.0 compatibility — metadata items can be None
+        when no metadatas provided at upsert time. Added `or {}` guard.
+        Clamped score to [0, 1] range.
+    v2: Initial implementation.
 """
 
 from __future__ import annotations
@@ -79,9 +85,9 @@ class ChromaDBStore(BaseVectorStore):
         search_results: list[SearchResult] = []
         if results["ids"] and results["ids"][0]:
             for i, doc_id in enumerate(results["ids"][0]):
-                score = 1.0 - (results["distances"][0][i] if results["distances"] else 0)
+                score = max(0.0, min(1.0, 1.0 - (results["distances"][0][i] if results["distances"] else 0)))
                 doc = results["documents"][0][i] if results["documents"] else ""
-                meta = results["metadatas"][0][i] if results["metadatas"] else {}
+                meta = (results["metadatas"][0][i] if results["metadatas"] else None) or {}
                 search_results.append(
                     SearchResult(
                         source_type=meta.get("source_type", "chunk"),

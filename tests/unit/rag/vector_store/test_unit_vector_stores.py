@@ -1,5 +1,12 @@
-# tests/unit/rag/vector_store/test_vector_stores.py — v1
-"""Tests for vector store adapters — properties and import error handling."""
+# tests/unit/rag/vector_store/test_unit_vector_stores.py — v2
+"""Tests for vector store adapters — properties and import error handling.
+
+Changelog:
+    v2: Catch RuntimeError for chromadb http-only client mode (devcontainer
+        installs chromadb as http-only). Use pytest.skip instead of failing.
+        Renamed from test_vector_stores.py per naming convention.
+    v1: Initial tests.
+"""
 
 from __future__ import annotations
 
@@ -17,6 +24,10 @@ class TestChromaDBStore:
             assert store.provider_name == "chromadb"
         except ImportError:
             pytest.skip("chromadb not installed")
+        except RuntimeError as exc:
+            if "http-only" in str(exc).lower():
+                pytest.skip("chromadb installed as http-only client")
+            raise
 
     def test_import_error(self):
         mod = sys.modules.get("chromadb")
@@ -67,8 +78,13 @@ class TestVectorStoreFactory:
             import chromadb  # noqa: F401
         except ImportError:
             pytest.skip("chromadb not installed")
-        from ayextractor.config.settings import Settings
-        from ayextractor.rag.vector_store.vector_store_factory import create_vector_store
-        s = Settings(_env_file=None, vector_db_type="chromadb", vector_db_path=tmp_path / "chroma")
-        store = create_vector_store(s)
-        assert store.provider_name == "chromadb"
+        try:
+            from ayextractor.config.settings import Settings
+            from ayextractor.rag.vector_store.vector_store_factory import create_vector_store
+            s = Settings(_env_file=None, vector_db_type="chromadb", vector_db_path=tmp_path / "chroma")
+            store = create_vector_store(s)
+            assert store.provider_name == "chromadb"
+        except RuntimeError as exc:
+            if "http-only" in str(exc).lower():
+                pytest.skip("chromadb installed as http-only client")
+            raise
